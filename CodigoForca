@@ -22,6 +22,7 @@ typedef struct {
     char texto[50];
 } Palavra;
 
+
 /* ===============================================================
    Funcoes para manipulacao de ARQUIVO BINARIO: words.bin
    =============================================================== */
@@ -69,7 +70,7 @@ Palavra *carregarPalavras(int *count) {
 void salvarPalavras(const Palavra *lista, int count) {
     FILE *fp = fopen("words.bin", "wb");
     if (!fp) {
-        printf("Nao foi possivel abrir o arquivo para escrita.\\n");
+        printf("Nao foi possivel abrir o arquivo para escrita.\n");
         return;
     }
     fwrite(lista, sizeof(Palavra), count, fp);
@@ -97,19 +98,19 @@ void cadastrarPalavra() {
     Palavra *lista = carregarPalavras(&count);
 
     char buffer[50];
-    printf("\\nDigite a palavra que deseja cadastrar (minimo 5 letras): ");
+    printf("\nDigite a palavra que deseja cadastrar (minimo 5 letras): ");
     scanf("%49s", buffer);
 
     // Verifica tamanho
     if (strlen(buffer) < 5) {
-        printf("Palavra invalida (precisa ter pelo menos 5 letras)!\\n");
+        printf("Palavra invalida (precisa ter pelo menos 5 letras)!\n");
         free(lista);
         return;
     }
 
     // Verifica se ja existe
     if (existePalavra(lista, count, buffer)) {
-        printf("\\nA palavra '%s' ja existe no arquivo!\\n", buffer);
+        printf("\nA palavra '%s' ja existe no arquivo!\n", buffer);
         free(lista);
         return;
     }
@@ -130,7 +131,7 @@ void cadastrarPalavra() {
     // Salva no arquivo
     salvarPalavras(novaLista, count);
 
-    printf("\\nPalavra '%s' cadastrada com sucesso!\\n", buffer);
+    printf("\nPalavra '%s' cadastrada com sucesso!\n", buffer);
 
     free(lista);
     free(novaLista);
@@ -142,39 +143,39 @@ void atualizarPalavra() {
     int count;
     Palavra *lista = carregarPalavras(&count);
     if (!lista || count == 0) {
-        printf("\\nNao ha palavras cadastradas para atualizar!\\n");
+        printf("\nNao ha palavras cadastradas para atualizar!\n");
         free(lista);
         return;
     }
 
     // Mostra palavras com indice
-    printf("\\nPalavras cadastradas:\\n");
+    printf("\nPalavras cadastradas:\n");
     for (int i = 0; i < count; i++) {
-        printf("[%d] %s\\n", i, lista[i].texto);
+        printf("[%d] %s\n", i, lista[i].texto);
     }
-    printf("\\nEscolha o indice da palavra que deseja atualizar: ");
+    printf("\nEscolha o indice da palavra que deseja atualizar: ");
     int indice;
     scanf("%d", &indice);
     if (indice < 0 || indice >= count) {
-        printf("Indice invalido!\\n");
+        printf("Indice invalido!\n");
         free(lista);
         return;
     }
 
     // Recebe a nova palavra
     char buffer[50];
-    printf("\\nDigite a nova palavra (minimo 5 letras): ");
+    printf("\nDigite a nova palavra (minimo 5 letras): ");
     scanf("%49s", buffer);
 
     if (strlen(buffer) < 5) {
-        printf("Palavra invalida (precisa ter 5 letras)!\\n");
+        printf("Palavra invalida (precisa ter 5 letras)!\n");
         free(lista);
         return;
     }
 
     // Verifica se ja existe
     if (existePalavra(lista, count, buffer)) {
-        printf("\\nA palavra '%s' ja existe no arquivo!\\n", buffer);
+        printf("\nA palavra '%s' ja existe no arquivo!\n", buffer);
         free(lista);
         return;
     }
@@ -184,7 +185,7 @@ void atualizarPalavra() {
 
     // Salva
     salvarPalavras(lista, count);
-    printf("\\nPalavra atualizada com sucesso!\\n");
+    printf("\nPalavra atualizada com sucesso!\n");
 
     free(lista);
 }
@@ -195,21 +196,21 @@ void apagarPalavra() {
     int count;
     Palavra *lista = carregarPalavras(&count);
     if (!lista || count == 0) {
-        printf("\\nNao ha palavras cadastradas para apagar!\\n");
+        printf("\nNao ha palavras cadastradas para apagar!\n");
         free(lista);
         return;
     }
 
     // Mostra palavras com indice
-    printf("\\nPalavras cadastradas:\\n");
+    printf("\nPalavras cadastradas:\n");
     for (int i = 0; i < count; i++) {
-        printf("[%d] %s\\n", i, lista[i].texto);
+        printf("[%d] %s\n", i, lista[i].texto);
     }
-    printf("\\nEscolha o indice da palavra que deseja apagar: ");
+    printf("\nEscolha o indice da palavra que deseja apagar: ");
     int indice;
     scanf("%d", &indice);
     if (indice < 0 || indice >= count) {
-        printf("Indice invalido!\\n");
+        printf("Indice invalido!\n");
         free(lista);
         return;
     }
@@ -229,7 +230,7 @@ void apagarPalavra() {
 
     // Salva
     salvarPalavras(novaLista, count);
-    printf("\\nPalavra apagada com sucesso!\\n");
+    printf("\nPalavra apagada com sucesso!\n");
 
     free(lista);
     free(novaLista);
@@ -240,16 +241,17 @@ void mostrarPalavras() {
     int count;
     Palavra *lista = carregarPalavras(&count);
     if (!lista || count == 0) {
-        printf("\\nNao ha palavras para exibir!\\n");
+        printf("\nNao ha palavras para exibir!\n");
         free(lista);
         return;
     }
-    printf("\\nPalavras cadastradas (%d encontradas):\\n", count);
+    printf("\nPalavras cadastradas (%d encontradas):\n", count);
     for (int i = 0; i < count; i++) {
-        printf("- %s\\n", lista[i].texto);
+        printf("- %s\n", lista[i].texto);
     }
     free(lista);
 }
+
 
 /* ===============================================================
    FUNCOES auxiliares para o JOGO DA FORCA
@@ -257,23 +259,23 @@ void mostrarPalavras() {
 
 /* Exibe as letras descobertas e underscores para as nao descobertas. */
 void exibirPalavraParcial(const char *palavra, const int *descobertas) {
-    // Cada posicao \"descobertas[i] = 1\" indica que a letra foi descoberta
+    // Cada posicao "descobertas[i] = 1" indica que a letra foi descoberta
     // do contrario, nao
     int len = strlen(palavra);
     for (int i = 0; i < len; i++) {
         if (descobertas[i])
-            printf(\"%c \", palavra[i]);
+            printf("%c ", palavra[i]);
         else
-            printf(\"_ \");
+            printf("_ ");
     }
-    printf(\"\\n\");
+    printf("\n");
 }
 
 /* Funcao recursiva para verificar todas as ocorrencias de uma letra na palavra.
    Retorna a quantidade de ocorrencias encontradas. */
 int revelarLetrasRecursivo(const char *palavra, char letra, int index, int *descobertas) {
     // Caso base: se chegou ao fim
-    if (palavra[index] == '\\0') {
+    if (palavra[index] == '\0') {
         return 0;
     }
     // Se for a letra, marca como descoberta
@@ -301,8 +303,8 @@ void jogarForca() {
     int count;
     Palavra *lista = carregarPalavras(&count);
 
-    if (!lista || count < 10) {
-        printf(\"\\nNao eh possivel iniciar o jogo. E necessario ter ao menos 10 palavras.\\n\");
+    if (!lista || count < 5 ) {
+        printf("\nNao eh possivel iniciar o jogo. E necessario ter ao menos 5 palavras.\n");
         free(lista);
         return;
     }
@@ -320,26 +322,26 @@ void jogarForca() {
     int chances = 6;
     int pontuacao = 0;
     char letrasTentadas[100];
-    letrasTentadas[0] = '\\0'; // string vazia
+    letrasTentadas[0] = '\0'; // string vazia
 
     // Enquanto houver chances e a palavra nao for toda descoberta
     while (chances > 0 && !todasLetrasDescobertas(descobertas, len)) {
-        printf(\"\\nPalavra: \");
+        printf("\nPalavra: ");
         exibirPalavraParcial(palavraSorteada, descobertas);
-        printf(\"Chances restantes: %d\\n\", chances);
-        printf(\"Letras ja tentadas: %s\\n\", (strlen(letrasTentadas) == 0) ? \"(nenhuma)\" : letrasTentadas);
-        printf(\"Pontuacao atual: %d\\n\", pontuacao);
-        printf(\"Digite uma letra: \");
+        printf("Chances restantes: %d\n", chances);
+        printf("Letras ja tentadas: %s\n", (strlen(letrasTentadas) == 0) ? "(nenhuma)" : letrasTentadas);
+        printf("Pontuacao atual: %d\n", pontuacao);
+        printf("Digite uma letra: ");
 
         char tentativa;
-        scanf(\" %c\", &tentativa);
+        scanf(" %c", &tentativa);
 
         // Converte para minusculo
         tentativa = (char)tolower(tentativa);
 
         // Verifica se ja foi tentada
         if (strchr(letrasTentadas, tentativa) != NULL) {
-            printf(\"\\nVoce ja tentou essa letra antes! Tente outra.\\n\");
+            printf("\nVoce ja tentou essa letra antes! Tente outra.\n");
             continue; // nao perde chance, mas nao faz nada
         }
 
@@ -347,7 +349,7 @@ void jogarForca() {
         {
             char temp[2];
             temp[0] = tentativa;
-            temp[1] = '\\0';
+            temp[1] = '\0';
             strcat(letrasTentadas, temp);
         }
 
@@ -355,11 +357,11 @@ void jogarForca() {
         int ocorrencias = revelarLetrasRecursivo(palavraSorteada, tentativa, 0, descobertas);
         if (ocorrencias > 0) {
             // Acertou
-            printf(\"\\nLetra '%c' encontrada %d vez(es)!\\n\", tentativa, ocorrencias);
+            printf("\nLetra '%c' encontrada %d vez(es)!\n", tentativa, ocorrencias);
             pontuacao += ocorrencias * 10; // ex: +10 pontos por acerto
         } else {
             // Errou
-            printf(\"\\nA palavra nao contem a letra '%c'.\\n\", tentativa);
+            printf("\nA palavra nao contem a letra '%c'.\n", tentativa);
             chances--;
             pontuacao -= 5; // penalidade por erro
         }
@@ -367,12 +369,12 @@ void jogarForca() {
 
     // Saiu do loop: ou acabou as chances ou descobriu a palavra
     if (todasLetrasDescobertas(descobertas, len)) {
-        printf(\"\\nParabens! Voce descobriu a palavra '%s'.\\n\", palavraSorteada);
+        printf("\nParabens! Voce descobriu a palavra '%s'.\n", palavraSorteada);
     } else {
-        printf(\"\\nSuas chances acabaram. A palavra era '%s'.\\n\", palavraSorteada);
+        printf("\nSuas chances acabaram. A palavra era '%s'.\n", palavraSorteada);
     }
 
-    printf(\"Pontuacao final: %d\\n\", pontuacao);
+    printf("Pontuacao final: %d\n", pontuacao);
 
     // Libera memoria
     free(lista);
@@ -381,12 +383,12 @@ void jogarForca() {
     // Opcao final
     int opc;
     do {
-        printf(\"\\nEscolha:\\n\");
-        printf(\"1 - Novo Jogo\\n\");
-        printf(\"2 - Menu Inicial\\n\");
-        printf(\"3 - Sair\\n\");
-        printf(\"Opcao: \");
-        scanf(\"%d\", &opc);
+        printf("\nEscolha:\n");
+        printf("1 - Novo Jogo\n");
+        printf("2 - Menu Inicial\n");
+        printf("3 - Sair\n");
+        printf("Opcao: ");
+        scanf("%d", &opc);
         if (opc == 1) {
             jogarForca(); // chama recursivamente para novo jogo
             return;       // apos terminar o novo jogo, retorna
@@ -394,10 +396,10 @@ void jogarForca() {
             // volta ao menu inicial
             return;
         } else if (opc == 3) {
-            printf(\"\\nEncerrando...\\n\");
+            printf("\nEncerrando...\n");
             exit(0);
         } else {
-            printf(\"Opcao invalida!\\n\");
+            printf("Opcao invalida!\n");
         }
     } while (opc != 1 && opc != 2 && opc != 3);
 }
@@ -407,16 +409,16 @@ void jogarForca() {
    =============================================================== */
 
 void exibirMenuPrincipal() {
-    printf(\"\\n========================================\\n\");
-    printf(\"         JOGO DA FORCA - MENU          \\n\");
-    printf(\"========================================\\n\");
-    printf(\"1 - Novo Jogo\\n\");
-    printf(\"2 - Cadastrar Palavra\\n\");
-    printf(\"3 - Atualizar Palavra\\n\");
-    printf(\"4 - Apagar Palavra\\n\");
-    printf(\"5 - Mostrar Palavras\\n\");
-    printf(\"6 - Sair\\n\");
-    printf(\"========================================\\n\");
+    printf("\n========================================\n");
+    printf("         JOGO DA FORCA - MENU          \n");
+    printf("========================================\n");
+    printf("1 - Novo Jogo\n");
+    printf("2 - Cadastrar Palavra\n");
+    printf("3 - Atualizar Palavra\n");
+    printf("4 - Apagar Palavra\n");
+    printf("5 - Mostrar Palavras\n");
+    printf("6 - Sair\n");
+    printf("========================================\n");
 }
 
 int main() {
@@ -424,8 +426,8 @@ int main() {
 
     while (1) {
         exibirMenuPrincipal();
-        printf(\"Escolha uma opcao: \");
-        scanf(\"%d\", &opcao);
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
         switch (opcao) {
             case 1:
                 jogarForca();
@@ -443,10 +445,10 @@ int main() {
                 mostrarPalavras();
                 break;
             case 6:
-                printf(\"\\nSaindo do programa...\\n\");
+                printf("\nSaindo do programa...\n");
                 return 0;
             default:
-                printf(\"Opcao invalida!\\n\");
+                printf("Opcao invalida!\n");
                 break;
         }
     }
